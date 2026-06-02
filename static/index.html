@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek - Assistant Agentique Vocal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="theme-dark">
+    <!-- Background lights -->
+    <div class="bg-glow bg-glow-primary"></div>
+    <div class="bg-glow bg-glow-secondary"></div>
+
+    <div class="app-container">
+        <!-- Main Sidebar (Left) -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                        <polyline points="2 17 12 22 22 17"></polyline>
+                        <polyline points="2 12 12 17 22 12"></polyline>
+                    </svg>
+                </div>
+                <h2>DeepSeek V3</h2>
+                <span class="brand-badge">Flash / Agent</span>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" id="nav-dashboard">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" id="btn-settings-toggle">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Paramètres</span>
+                </button>
+            </nav>
+
+            <div class="system-status-panel">
+                <div class="status-header">Système</div>
+                <div class="status-row">
+                    <span class="label">Statut global :</span>
+                    <span class="val status-indicator offline" id="connection-status">Connexion...</span>
+                </div>
+                <div class="status-row">
+                    <span class="label">Moteur Vocal :</span>
+                    <span class="val" id="status-engine">SAPI5</span>
+                </div>
+                <div class="status-row">
+                    <span class="label">Fail-Safe :</span>
+                    <span class="val status-on">Actif</span>
+                </div>
+            </div>
+            
+            <button class="stop-btn" id="btn-emergency-stop">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+                <span>ARRÊT D'URGENCE (ESC)</span>
+            </button>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="bar-title">
+                    <h1>Tableau de Bord</h1>
+                    <p>Contrôle agentique intelligent & vocal</p>
+                </div>
+                <div class="agent-state-badge" id="agent-state-badge">
+                    <span class="state-dot"></span>
+                    <span class="state-text">Initialisation...</span>
+                </div>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- Center: Assistant Alexa Sphere & Visualizer -->
+                <div class="card assistant-card">
+                    <div class="card-header">
+                        <h3>Assistant Vocal</h3>
+                        <div class="voice-mode-selector">
+                            <span class="label">Écoute continue (Wake Word) :</span>
+                            <label class="switch">
+                                <input type="checkbox" id="switch-continuous-listen">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body ring-center-body">
+                        <!-- Sélecteur rapide de Personnalité IA -->
+                        <div class="quick-persona-selector" id="quick-persona-selector">
+                            <div class="persona-current" id="persona-current-display" title="Changer de personnalité">
+                                <span class="active-persona-emoji" id="active-persona-emoji">🤖</span>
+                                <span class="active-persona-name" id="active-persona-name">Jarvis</span>
+                                <svg class="persona-chevron" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                            <div class="persona-dropdown" id="persona-dropdown-options">
+                                <!-- Rempli dynamiquement par app.js -->
+                            </div>
+                        </div>
+                        
+                        <div class="voice-summary-strip" aria-label="Synthese vocale">
+                            <div class="voice-summary-item">
+                                <span class="summary-label">Etat</span>
+                                <strong id="voice-summary-state">Initialisation</strong>
+                            </div>
+                            <div class="voice-summary-item">
+                                <span class="summary-label">TTS</span>
+                                <strong id="voice-summary-tts">120</strong>
+                            </div>
+                            <div class="voice-summary-item">
+                                <span class="summary-label">Wake word</span>
+                                <strong id="voice-summary-wake-word">jarvis</strong>
+                            </div>
+                        </div>
+
+                        <!-- Alexa Glowing Ring Container -->
+                        <div class="alexa-ring-container">
+                            <div class="alexa-ring" id="alexa-ring">
+                                <div class="ring-core">
+                                    <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" id="mic-icon-inside">
+                                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Audio Waveform Visualizer -->
+                        <div class="visualizer-container">
+                            <canvas id="audio-waveform"></canvas>
+                        </div>
+                        
+                        <div class="voice-controls">
+                            <button class="btn btn-primary btn-listen" id="btn-manual-listen">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                                <span>Parler</span>
+                            </button>
+                            <button class="btn btn-secondary" id="btn-trigger-ocr">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                <span>OCR Écran</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Chat Window -->
+                <div class="card chat-card">
+                    <div class="card-header">
+                        <h3>Conversation</h3>
+                        <button class="btn-clear" id="btn-clear-chat">Effacer</button>
+                    </div>
+                    <div class="card-body chat-messages" id="chat-messages">
+                        <div class="message system">
+                            <div class="msg-content">Bienvenue dans votre assistant vocal. Dites "ordinateur" ou cliquez sur "Parler" pour lui envoyer une commande.</div>
+                        </div>
+                    </div>
+                    <div class="chat-footer">
+                        <input type="text" id="chat-input" placeholder="Saisissez une commande ici...">
+                        <button id="btn-send-chat">
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bottom: Live Logs / Command Execution Terminal -->
+                <div class="card console-card">
+                    <div class="card-header">
+                        <h3>Console d'Activité de l'Agent (Logs des Tools)</h3>
+                        <span class="console-badge">Live</span>
+                    </div>
+                    <div class="card-body console-body" id="console-logs">
+                        <div class="log-line system">[Système] Console démarrée. En attente d'activité...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configuration de l'Assistant</h2>
+                <button class="close-btn" id="btn-close-settings">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="settings-form">
+                    <div class="form-group">
+                        <label for="setting-api-key">Clé API DeepSeek :</label>
+                        <input type="password" id="setting-api-key" placeholder="sk-...">
+                        <small>La clé est stockée localement sur votre ordinateur dans config.json.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="setting-base-url">URL de Base API :</label>
+                        <input type="text" id="setting-base-url" placeholder="https://api.deepseek.com">
+                    </div>
+
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="setting-model">Modèle IA :</label>
+                            <input type="text" id="setting-model" placeholder="deepseek-chat">
+                        </div>
+                        <div class="form-group">
+                            <label for="setting-wake-word">Mot d'activation :</label>
+                            <input type="text" id="setting-wake-word" placeholder="ordinateur">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="setting-tts-provider">Moteur TTS :</label>
+                        <select id="setting-tts-provider">
+                            <option value="edge">Microsoft Edge TTS (Haute Qualité, Gratuit)</option>
+                            <option value="pyttsx3">Voix Système SAPI5 (Windows)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="edge-voice-group">
+                        <label for="setting-edge-voice">Voix Edge TTS :</label>
+                        <select id="setting-edge-voice">
+                            <option value="">Chargement des voix Edge...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="sapi5-voice-group" style="display:none;">
+                        <label for="setting-voice">Voix Système SAPI5 :</label>
+                        <select id="setting-voice">
+                            <option value="">Chargement des voix système...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <div class="setting-label-row">
+                                <label for="setting-rate">Vitesse TTS :</label>
+                                <output id="setting-rate-value" for="setting-rate">120</output>
+                            </div>
+                            <input type="range" id="setting-rate" min="80" max="220" step="5" value="120">
+                            <div class="range-scale" aria-hidden="true">
+                                <span>Lent</span>
+                                <span>Normal</span>
+                                <span>Rapide</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="setting-volume">Volume TTS :</label>
+                            <input type="range" id="setting-volume" min="0" max="1" step="0.1">
+                        </div>
+                    </div>
+
+                    <!-- Sélecteur de Personnalité IA -->
+                    <div class="form-group persona-section">
+                        <label>Personnalité de l'Assistant IA :</label>
+                        <p class="form-hint">Choisissez une personnalité qui définira le ton, le style et le comportement de votre assistant.</p>
+                        <div class="persona-grid" id="persona-grid">
+                            <span class="loading-text">Chargement des personnalités...</span>
+                        </div>
+                        <input type="hidden" id="setting-persona-id" value="jarvis">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-settings">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert / Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+    
+    <script src="/static/app.js"></script>
+</body>
+</html>
