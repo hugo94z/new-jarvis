@@ -1,0 +1,46 @@
+# ============================================================
+#   Assistant Vocal Agentique DeepSeek - Dépendances
+# ============================================================
+# Installation : pip install -r requirements.txt
+#
+# NOTES IMPORTANTES :
+# - PyAudio nécessite les build tools C++ de Visual Studio
+#   OU installer la wheel précompilée :
+#   pip install pipwin && pipwin install pyaudio
+# - Tesseract OCR doit être installé SÉPARÉMENT sur le système
+#   Téléchargement : https://github.com/UB-Mannheim/tesseract/wiki
+# - Sentence-Transformers est optionnel (mémoire sémantique)
+# - Les voix SAPI5 sont incluses dans Windows (fr-FR)
+# ============================================================
+
+# === Core API & Server ===
+fastapi>=0.100.0
+uvicorn[standard]>=0.22.0
+websockets>=11.0
+
+# === AI / LLM ===
+openai>=1.0.0
+
+# === Voice & Speech ===
+SpeechRecognition>=3.10.0
+edge-tts>=6.1.0
+pyttsx3>=2.90
+
+# === Audio (microphone, lecture, conversion) ===
+# ATTENTION : Si PyAudio échoue, utiliser :
+#   pip install pipwin && pipwin install pyaudio
+PyAudio>=0.2.13
+pydub>=0.25.0
+wave
+
+# === Automation & System ===
+pyautogui>=0.9.54
+Pillow>=10.0.0
+
+# === Memory / Embeddings (optionnel) ===
+# Peut être commenté si la mémoire sémantique n'est pas utilisée
+sentence-transformers>=2.2.0
+
+# === OCR (optionnel) ===
+# Nécessite Tesseract installé séparément (voir README.md)
+pytesseract>=0.3.10
